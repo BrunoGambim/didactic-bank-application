@@ -37,6 +37,8 @@ public abstract class Bank {
 	 * @throws Exception 
 	 */
 	public static void main(String[] args) throws Exception {
+		
+		//teste
 		PropertyConfigurator.configure(Bank.class
 				.getResource(PROPERTIES_FILE_LOG4J));
 
