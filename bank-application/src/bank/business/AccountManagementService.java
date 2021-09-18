@@ -13,7 +13,7 @@ import bank.business.domain.Employee;
  * 
  */
 public interface AccountManagementService {
-	//teste
+
 	public CurrentAccount createCurrentAccount(long branch, String name,
 			String lastName, int cpf, Date birthday, double balance)
 			throws BusinessException;
