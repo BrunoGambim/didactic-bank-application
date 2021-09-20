@@ -13,7 +13,7 @@ import bank.business.impl.AccountManagementServiceImpl;
 import bank.business.impl.AccountOperationServiceImpl;
 import bank.data.Database;
 import bank.ui.BankInterface;
-//oi teste
+//Ola Bruno
 /**
  * This class provides the implementation of the main method used for 
  * initializing the Bank application and specifies the methods required to be
