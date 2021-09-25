@@ -36,14 +36,16 @@ public class CurrentAccount implements Credentials {
 
 	public Deposit deposit(OperationLocation location, long envelope,
 			double amount) throws BusinessException {
-		depositAmount(amount);
-
+		
 		Deposit deposit = new Deposit(location, this, envelope, amount);
 		this.deposits.add(deposit);
-
+		if(deposit.getStatus() == DepositStatus.FINISHED || amount <= 100) {
+			depositAmount(amount);
+		}
+		
 		return deposit;
 	}
-
+	
 	private void depositAmount(double amount) throws BusinessException {
 		if (!isValidAmount(amount)) {
 			throw new BusinessException("exception.invalid.amount");
