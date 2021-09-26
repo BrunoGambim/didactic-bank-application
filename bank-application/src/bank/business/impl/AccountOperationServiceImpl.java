@@ -3,7 +3,9 @@
  */
 package bank.business.impl;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -16,6 +18,7 @@ import bank.business.domain.Branch;
 import bank.business.domain.CurrentAccount;
 import bank.business.domain.CurrentAccountId;
 import bank.business.domain.Deposit;
+import bank.business.domain.DepositStatus;
 import bank.business.domain.OperationLocation;
 import bank.business.domain.Transaction;
 import bank.business.domain.Transfer;
@@ -162,6 +165,30 @@ public class AccountOperationServiceImpl implements AccountOperationService {
 		Withdrawal withdrawal = currentAccount.withdrawal(
 				getOperationLocation(operationLocation), amount);
 		return withdrawal;
+	}
+
+	@Override
+	public List<Deposit> getPendingDeposits() {
+		Collection<Deposit> allDeposits = this.database.getAllDeposits();
+		List<Deposit> pendingDeposits = new ArrayList<Deposit>();
+		for(Deposit deposit : allDeposits) {
+			if(deposit.getStatus() == DepositStatus.PENDING) {
+				pendingDeposits.add(deposit);
+			}
+		}
+		return pendingDeposits;
+	}
+
+	@Override
+	public void confirmDeposit(Deposit chosenDeposit) throws BusinessException {
+		CurrentAccount currentAccount = chosenDeposit.getAccount();
+		currentAccount.confirmDeposit(chosenDeposit);
+	}
+
+	@Override
+	public void cancelDeposit(Deposit chosenDeposit) throws BusinessException {
+		CurrentAccount currentAccount = chosenDeposit.getAccount();
+		currentAccount.cancelDeposit(chosenDeposit);
 	}
 
 }

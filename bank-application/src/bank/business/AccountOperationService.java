@@ -41,4 +41,10 @@ public interface AccountOperationService {
 	public Withdrawal withdrawal(long operationLocation, long branch,
 			long accountNumber, double amount) throws BusinessException;
 
+	public List<Deposit> getPendingDeposits();
+
+	public void confirmDeposit(Deposit chosenDeposit) throws BusinessException;
+
+	public void cancelDeposit(Deposit chosenDeposit) throws BusinessException;
+
 }

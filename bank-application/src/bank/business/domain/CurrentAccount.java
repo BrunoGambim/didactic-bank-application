@@ -46,12 +46,34 @@ public class CurrentAccount implements Credentials {
 		return deposit;
 	}
 	
+	public void confirmDeposit(Deposit chosenDeposit) throws BusinessException {
+		chosenDeposit.setStatus(DepositStatus.FINISHED);
+		if(chosenDeposit.getAmount() > 100) {
+			depositAmount(chosenDeposit.getAmount());
+		}
+	}
+
+	public void cancelDeposit(Deposit chosenDeposit) throws BusinessException {
+		chosenDeposit.setStatus(DepositStatus.CANCELED);
+		if(chosenDeposit.getAmount() <= 100) {
+			removeAmount(chosenDeposit.getAmount());
+		}
+	}
+
 	private void depositAmount(double amount) throws BusinessException {
 		if (!isValidAmount(amount)) {
 			throw new BusinessException("exception.invalid.amount");
 		}
 
 		this.balance += amount;
+	}
+	
+	private void removeAmount(double amount) throws BusinessException {
+		if (!isValidAmount(amount)) {
+			throw new BusinessException("exception.invalid.amount");
+		}
+
+		this.balance -= amount;
 	}
 
 	/**

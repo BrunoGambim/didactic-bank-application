@@ -3,6 +3,7 @@
  */
 package bank.data;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
@@ -18,6 +19,7 @@ import bank.business.domain.Branch;
 import bank.business.domain.Client;
 import bank.business.domain.CurrentAccount;
 import bank.business.domain.CurrentAccountId;
+import bank.business.domain.Deposit;
 import bank.business.domain.Employee;
 import bank.business.domain.OperationLocation;
 import bank.business.domain.Transaction;
@@ -46,6 +48,26 @@ public class Database {
 			initData();
 		}
 	}
+	
+	public Collection<Deposit> getAllDeposits(){
+		Collection<Transaction> transactions = this.getAllTransactions();
+		Collection<Deposit> deposits = new ArrayList<>();
+		for(Transaction transaction : transactions) {
+			if(transaction instanceof Deposit) {
+				deposits.add((Deposit) transaction);
+			}
+		}
+		return deposits;
+	}
+	
+	public Collection<Transaction> getAllTransactions() {
+		Collection<CurrentAccount> accounts = this.currentAccounts.values();
+		Collection<Transaction> transactions = new ArrayList<>();
+		for(CurrentAccount account : accounts) {
+			transactions.addAll(account.getTransactions());
+		}
+		return transactions;
+	} 
 
 	public Collection<CurrentAccount> getAllCurrentAccounts() {
 		return this.currentAccounts.values();
