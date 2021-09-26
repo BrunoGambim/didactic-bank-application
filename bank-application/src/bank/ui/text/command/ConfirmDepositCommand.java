@@ -3,6 +3,7 @@ package bank.ui.text.command;
 import java.util.List;
 
 import bank.business.AccountOperationService;
+import bank.business.BusinessException;
 import bank.business.domain.Deposit;
 import bank.ui.text.BankTextInterface;
 import bank.ui.text.UIUtils;
@@ -19,26 +20,15 @@ public class ConfirmDepositCommand extends Command{
 
 	@Override
 	public void execute() throws Exception {
-		final int CONFIRM = 1;
-		final int CANCEL = 2;
 		List<Deposit> deposits = accountOperationService.getPendingDeposits();
 		printDepositMenu(deposits);
-		Integer option = UIUtils.INSTANCE.readInteger("message.choose.deposit") - 1;
+		int option = UIUtils.INSTANCE.readInteger("message.choose.deposit") - 1;
 		Deposit chosenDeposit = null;
 		if(option >= 0 && option < deposits.size()) {
 			chosenDeposit = deposits.get(option);
-			System.out.println(chosenDeposit.getAmount());
-			System.out.println("1 - Confirmar\n2 - Cancelar\nDigite o número da opção:");
-			option = UIUtils.INSTANCE.readInteger(null);
-			if(option == CONFIRM) {
-				accountOperationService.confirmDeposit(chosenDeposit);
-			}else if(option == CANCEL) {
-				accountOperationService.cancelDeposit(chosenDeposit);
-			}else {
-				throw new RuntimeException();
-			}
+			changeDepositStatus(chosenDeposit);
 		}else {
-			throw new RuntimeException();
+			throw new RuntimeException("Depósito de número "+option+" não existe");
 		}
 		System.out.println(getTextManager().getText(
 				"message.operation.succesfull"));
@@ -64,5 +54,21 @@ public class ConfirmDepositCommand extends Command{
 			sb.append("\n");
 		}
 		System.out.println(sb);
+	}
+	private void changeDepositStatus(Deposit deposit) throws BusinessException {
+		final int CONFIRM = 1;
+		final int CANCEL = 2;
+		System.out.println("1 - Confirmar\n2 - Cancelar");
+		int option = UIUtils.INSTANCE.readInteger("message.choose.option");
+		switch (option) {
+		case CONFIRM:
+			accountOperationService.confirmDeposit(deposit);
+			break;
+		case CANCEL:
+			accountOperationService.cancelDeposit(deposit);
+			break;
+		default:
+			throw new IllegalArgumentException("Valor inexperado: " + option);
+		}
 	}
 }
