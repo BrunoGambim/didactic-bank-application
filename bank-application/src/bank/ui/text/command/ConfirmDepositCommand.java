@@ -21,45 +21,52 @@ public class ConfirmDepositCommand extends Command{
 	@Override
 	public void execute() throws Exception {
 		List<Deposit> deposits = accountOperationService.getPendingDeposits();
-		printDepositMenu(deposits);
-		int option = UIUtils.INSTANCE.readInteger("message.choose.deposit") - 1;
-		Deposit chosenDeposit = null;
-		if(option >= 0 && option < deposits.size()) {
-			chosenDeposit = deposits.get(option);
-			changeDepositStatus(chosenDeposit);
-		}else {
-			throw new RuntimeException("Depósito de número "+option+" não existe");
+		printDepositList(deposits);
+		int option = UIUtils.INSTANCE.readInteger("message.choose.deposit",0,deposits.size());
+		if(option != 0) {
+			Deposit chosenDeposit = deposits.get(option - 1);
+			finishDeposit(chosenDeposit);
+			System.out.println("Status final do depósito: " + getTextManager()
+						.getText(chosenDeposit.getStatus().toString()));
+			System.out.println(getTextManager().getText(
+					"message.operation.succesfull"));
 		}
-		System.out.println(getTextManager().getText(
-				"message.operation.succesfull"));
 	}
-	private void printDepositMenu(List<Deposit> deposits) {
+	private void printDepositList(List<Deposit> deposits) {
+		System.out.print(getTextManager().getText("deposit.id")+"\t");
+		printDepositHeader();
+		for (int i = 0; i < deposits.size();i++) {
+			System.out.print((i+1)+"\t\t\t");
+			printDeposit(deposits.get(i));
+		}
+	}
+	private void printDepositHeader(){
 		StringBuffer sb = new StringBuffer();
-		sb.append(getTextManager().getText("deposit.id")).append("\t");
 		sb.append(getTextManager().getText("account.number")).append("\t\t");
 		sb.append(getTextManager().getText("date")).append("\t\t\t");
 		sb.append(getTextManager().getText("location")).append("\t");
 		sb.append(getTextManager().getText("details")).append("\t");
 		sb.append(getTextManager().getText("amount")).append("\n");
-		sb.append("-----------------------------------------------------------------------------------------------------------\n");
-		int i = 1;
-		for (Deposit deposit : deposits) {
-			sb.append(i++).append("\t\t\t");	
-			sb.append(deposit.getAccount().getId().getNumber()).append("\t\t\t");
-			sb.append(UIUtils.INSTANCE.formatDateTime(deposit.getDate()))
-				.append("\t");	
-			sb.append(deposit.getLocation()).append("\t\t");
-			sb.append(deposit.getEnvelope()).append("\t\t");			
-			sb.append("+ ").append(deposit.getAmount());			 
-			sb.append("\n");
-		}
+		sb.append("-----------------------------------------------------------------------------------------------------------");
 		System.out.println(sb);
 	}
-	private void changeDepositStatus(Deposit deposit) throws BusinessException {
+	private void printDeposit(Deposit deposit){
+		StringBuffer sb = new StringBuffer();	
+		sb.append(deposit.getAccount().getId().getNumber()).append("\t\t\t");
+		sb.append(UIUtils.INSTANCE.formatDateTime(deposit.getDate()))
+			.append("\t");	
+		sb.append(deposit.getLocation()).append("\t\t");
+		sb.append(deposit.getEnvelope()).append("\t\t");			
+		sb.append("+ ").append(deposit.getAmount());			 
+		System.out.println(sb);
+	}
+	private void finishDeposit(Deposit deposit) throws BusinessException {
 		final int CONFIRM = 1;
 		final int CANCEL = 2;
-		System.out.println("1 - Confirmar\n2 - Cancelar");
-		int option = UIUtils.INSTANCE.readInteger("message.choose.option");
+		printDepositHeader();
+		printDeposit(deposit);
+		printOptionsMenu();
+		int option = UIUtils.INSTANCE.readInteger("message.choose.option",1,2);
 		switch (option) {
 		case CONFIRM:
 			accountOperationService.confirmDeposit(deposit);
@@ -68,7 +75,14 @@ public class ConfirmDepositCommand extends Command{
 			accountOperationService.cancelDeposit(deposit);
 			break;
 		default:
-			throw new IllegalArgumentException("Valor inexperado: " + option);
+			throw new IllegalArgumentException("Valor inesperado: " + option);
 		}
+	}
+	private void printOptionsMenu() {
+		StringBuffer sb = new StringBuffer();	
+		sb.append(getTextManager().getText("message.choose.option")).append("\n");
+		sb.append("1-").append(getTextManager().getText("action.confirm")).append("\n");
+		sb.append("2-").append(getTextManager().getText("action.cancel")).append("\n");
+		System.out.println(sb);
 	}
 }
