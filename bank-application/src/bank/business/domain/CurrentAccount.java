@@ -56,7 +56,7 @@ public class CurrentAccount implements Credentials {
 	public void cancelDeposit(Deposit chosenDeposit) throws BusinessException {
 		chosenDeposit.setStatus(DepositStatus.CANCELED);
 		if(chosenDeposit.getAmount() <= 100) {
-			removeAmount(chosenDeposit.getAmount());
+			debitAmount(chosenDeposit.getAmount());
 		}
 	}
 
@@ -68,7 +68,7 @@ public class CurrentAccount implements Credentials {
 		this.balance += amount;
 	}
 	
-	private void removeAmount(double amount) throws BusinessException {
+	private void debitAmount(double amount) throws BusinessException {
 		if (!isValidAmount(amount)) {
 			throw new BusinessException("exception.invalid.amount");
 		}
@@ -164,7 +164,7 @@ public class CurrentAccount implements Credentials {
 			throw new BusinessException("exception.insufficient.balance");
 		}
 
-		removeAmount(amount);
+		debitAmount(amount);
 	}
 
 }
