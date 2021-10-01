@@ -61,7 +61,7 @@ public class Database {
 	}
 	
 	public Collection<Transaction> getAllTransactions() {
-		Collection<CurrentAccount> accounts = this.currentAccounts.values();
+		Collection<CurrentAccount> accounts = getAllCurrentAccounts();
 		Collection<Transaction> transactions = new ArrayList<>();
 		for(CurrentAccount account : accounts) {
 			transactions.addAll(account.getTransactions());
