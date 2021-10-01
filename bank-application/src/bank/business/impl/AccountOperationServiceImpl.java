@@ -180,15 +180,15 @@ public class AccountOperationServiceImpl implements AccountOperationService {
 	}
 
 	@Override
-	public void confirmDeposit(Deposit chosenDeposit) throws BusinessException {
-		CurrentAccount currentAccount = chosenDeposit.getAccount();
-		currentAccount.confirmDeposit(chosenDeposit);
+	public void confirmDeposit(Deposit deposit) throws BusinessException {
+		CurrentAccount currentAccount = deposit.getAccount();
+		currentAccount.confirmDeposit(deposit);
 	}
 
 	@Override
-	public void cancelDeposit(Deposit chosenDeposit) throws BusinessException {
-		CurrentAccount currentAccount = chosenDeposit.getAccount();
-		currentAccount.cancelDeposit(chosenDeposit);
+	public void cancelDeposit(Deposit deposit) throws BusinessException {
+		CurrentAccount currentAccount = deposit.getAccount();
+		currentAccount.cancelDeposit(deposit);
 	}
 
 }

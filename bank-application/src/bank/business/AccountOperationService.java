@@ -43,8 +43,8 @@ public interface AccountOperationService {
 
 	public List<Deposit> getPendingDeposits();
 
-	public void confirmDeposit(Deposit chosenDeposit) throws BusinessException;
+	public void confirmDeposit(Deposit deposit) throws BusinessException;
 
-	public void cancelDeposit(Deposit chosenDeposit) throws BusinessException;
+	public void cancelDeposit(Deposit deposit) throws BusinessException;
 
 }
