@@ -160,15 +160,11 @@ public class CurrentAccount implements Credentials {
 	}
 
 	private void withdrawalAmount(double amount) throws BusinessException {
-		if (!isValidAmount(amount)) {
-			throw new BusinessException("exception.invalid.amount");
-		}
-
 		if (!hasEnoughBalance(amount)) {
 			throw new BusinessException("exception.insufficient.balance");
 		}
 
-		this.balance -= amount;
+		removeAmount(amount);
 	}
 
 }
