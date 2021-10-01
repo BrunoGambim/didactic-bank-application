@@ -13,14 +13,14 @@ public class Deposit extends Transaction {
 			long envelope, double amount) {
 		super(location, account, amount);
 		this.envelope = envelope;
-		this.status = this.getInitialDepositStatus();
+		setInitialDepositStatus();
 	}
 
-	private DepositStatus getInitialDepositStatus() {
+	private void setInitialDepositStatus() {
 		if(this.getLocation() instanceof ATM) {
-			return DepositStatus.PENDING;
+			setStatus(DepositStatus.PENDING);
 		}else if(this.getLocation() instanceof Branch) {
-			return DepositStatus.FINISHED;
+			setStatus(DepositStatus.FINISHED);
 		} else {
 			throw new RuntimeException("Tipo de local desconhecido");
 		}
