@@ -81,8 +81,8 @@ public class ConfirmDepositCommand extends Command{
 	private void printOptionsMenu() {
 		StringBuffer sb = new StringBuffer();	
 		sb.append(getTextManager().getText("message.choose.option")).append(":").append("\n");
-		sb.append("1-").append(getTextManager().getText("action.confirm")).append("\n");
-		sb.append("2-").append(getTextManager().getText("action.cancel")).append("\n");
+		sb.append("1-").append(getTextManager().getText("message.confirm")).append("\n");
+		sb.append("2-").append(getTextManager().getText("message.cancel")).append("\n");
 		System.out.println(sb);
 	}
 }
