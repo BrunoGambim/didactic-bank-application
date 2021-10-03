@@ -29,7 +29,9 @@ public class DepositCommand extends Command {
 		Deposit deposit = accountOperationService.deposit(bankInterface
 				.getOperationLocation().getNumber(), branch, accountNumber,
 				envelope, amount);
-
+		
+		System.out.println("Status final do depósito: " + getTextManager()
+		.getText(deposit.getStatus().toString()));
 		System.out.println(getTextManager().getText(
 				"message.operation.succesfull"));
 		System.out.println(getTextManager().getText("deposit") + ": "
