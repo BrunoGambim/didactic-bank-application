@@ -20,10 +20,11 @@ public class ConfirmDepositCommand extends Command{
 
 	@Override
 	public void execute() throws Exception {
+		final int EXIT = 0;
 		List<Deposit> deposits = accountOperationService.getPendingDeposits();
 		printDepositList(deposits);
 		int option = UIUtils.INSTANCE.readInteger("message.choose.deposit",0,deposits.size());
-		if(option != 0) {
+		if(option != EXIT) {
 			Deposit chosenDeposit = deposits.get(option - 1);
 			finishDeposit(chosenDeposit);
 			System.out.println("Status final do depósito: " + getTextManager()
