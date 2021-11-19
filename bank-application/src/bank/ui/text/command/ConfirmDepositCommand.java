@@ -11,6 +11,9 @@ import bank.ui.text.UIUtils;
 public class ConfirmDepositCommand extends Command{
 
 	private final AccountOperationService accountOperationService;
+	private static final int EXIT = 0;
+	private static final int CONFIRM = 1;
+	private static final int CANCEL = 2;
 
 	public ConfirmDepositCommand(BankTextInterface bankInterface,
 			AccountOperationService accountOperationService) {
@@ -23,10 +26,10 @@ public class ConfirmDepositCommand extends Command{
 		List<Deposit> deposits = accountOperationService.getPendingDeposits();
 		printDepositList(deposits);
 		int option = UIUtils.INSTANCE.readInteger("message.choose.deposit",0,deposits.size());
-		if(option != 0) {
+		if(option != EXIT) {
 			Deposit chosenDeposit = deposits.get(option - 1);
 			finishDeposit(chosenDeposit);
-			System.out.println("Status final do depósito: " + getTextManager()
+			System.out.println(getTextManager().getText("message.finalDepositStatus")+": " + getTextManager()
 						.getText(chosenDeposit.getStatus().toString()));
 			System.out.println(getTextManager().getText(
 					"message.operation.succesfull"));
@@ -61,8 +64,6 @@ public class ConfirmDepositCommand extends Command{
 		System.out.println(sb);
 	}
 	private void finishDeposit(Deposit deposit) throws BusinessException {
-		final int CONFIRM = 1;
-		final int CANCEL = 2;
 		printDepositHeader();
 		printDeposit(deposit);
 		printOptionsMenu();
@@ -75,7 +76,7 @@ public class ConfirmDepositCommand extends Command{
 			accountOperationService.cancelDeposit(deposit);
 			break;
 		default:
-			throw new IllegalArgumentException("Valor inesperado: " + option);
+			throw new IllegalArgumentException(getTextManager().getText("exception.unexpected.value")+": " + option);
 		}
 	}
 	private void printOptionsMenu() {

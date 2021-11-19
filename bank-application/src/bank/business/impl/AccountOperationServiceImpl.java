@@ -172,7 +172,7 @@ public class AccountOperationServiceImpl implements AccountOperationService {
 		Collection<Deposit> allDeposits = this.database.getAllDeposits();
 		List<Deposit> pendingDeposits = new ArrayList<Deposit>();
 		for(Deposit deposit : allDeposits) {
-			if(deposit.getStatus() == DepositStatus.PENDING) {
+			if(deposit.getStatus().equals(DepositStatus.PENDING) ) {
 				pendingDeposits.add(deposit);
 			}
 		}

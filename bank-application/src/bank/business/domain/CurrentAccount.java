@@ -17,6 +17,7 @@ public class CurrentAccount implements Credentials {
 	private CurrentAccountId id;
 	private List<Transfer> transfers;
 	private List<Withdrawal> withdrawals;
+	private final static float INSTANT_DEPOSIT_THRESHOLD = 100;
 
 	public CurrentAccount(Branch branch, long number, Client client) {
 		this.id = new CurrentAccountId(branch, number);
@@ -39,7 +40,7 @@ public class CurrentAccount implements Credentials {
 		
 		Deposit deposit = new Deposit(location, this, envelope, amount);
 		this.deposits.add(deposit);
-		if(deposit.getStatus() == DepositStatus.FINISHED || amount <= 100) {
+		if(deposit.getStatus().equals(DepositStatus.FINISHED)  || amount <= INSTANT_DEPOSIT_THRESHOLD) {
 			depositAmount(amount);
 		}
 		
@@ -48,14 +49,14 @@ public class CurrentAccount implements Credentials {
 	
 	public void confirmDeposit(Deposit deposit) throws BusinessException {
 		deposit.setStatus(DepositStatus.FINISHED);
-		if(deposit.getAmount() > 100) {
+		if(deposit.getAmount() > INSTANT_DEPOSIT_THRESHOLD) {
 			depositAmount(deposit.getAmount());
 		}
 	}
 
 	public void cancelDeposit(Deposit deposit) throws BusinessException {
 		deposit.setStatus(DepositStatus.CANCELED);
-		if(deposit.getAmount() <= 100) {
+		if(deposit.getAmount() <= INSTANT_DEPOSIT_THRESHOLD) {
 			debitAmount(deposit.getAmount());
 		}
 	}
