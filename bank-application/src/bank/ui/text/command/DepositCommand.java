@@ -30,7 +30,8 @@ public class DepositCommand extends Command {
 				.getOperationLocation().getNumber(), branch, accountNumber,
 				envelope, amount);
 		
-		System.out.println("Status do depósito: " + getTextManager()
+		System.out.println(getTextManager().getText(
+				"message.depositStatus")+": " + getTextManager()
 		.getText(deposit.getStatus().toString()));
 		System.out.println(getTextManager().getText(
 				"message.operation.succesfull"));
